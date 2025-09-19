@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Leo Gong — CS × Arts</title>
+  <meta name="description" content="Portfolio & resume site for Leo J. Gong — Carnegie Mellon CS & Arts, software + music." />
+  <meta property="og:title" content="Leo Gong — CS × Arts" />
+  <meta property="og:description" content="Software, systems, AI projects, and music by Leo J. Gong." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink: 222 16% 16%;
+      --ink-2: 220 15% 28%;
+      --paper: 0 0% 100%;
+      --accent: 269 77% 57%; /* orchid */
+      --accent-2: 201 100% 47%; /* cyan-ish */
+    }
+    html{color-scheme: light dark}
+    body{
+      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, Noto Sans, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height:1.5; color:hsl(var(--ink)); background:
+        radial-gradient(1200px 800px at 10% -10%, hsl(var(--accent)/0.10), transparent 60%),
+        radial-gradient(900px 600px at 90% -10%, hsl(var(--accent-2)/0.10), transparent 60%),
+        #0b0b10;
+      background-attachment: fixed;
+    }
+    .page{max-width:1100px; margin:0 auto; padding:24px clamp(16px, 4vw, 48px) 80px;}
+
+    /* musical staff background */
+    .staff{
+      position: fixed; inset:0; pointer-events:none; opacity:.10; mix-blend-mode:screen;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,.15) 0 1px,
+          transparent 1px 12px
+        );
+    }
+
+    .skip{position:absolute; left:-9999px}
+    .skip:focus{left:16px; top:16px; z-index:9999; background:white; color:black; padding:8px 12px; border-radius:999px}
+
+    header{
+      position: sticky; top:0; z-index:5; backdrop-filter: blur(8px);
+      background: linear-gradient(to bottom, rgba(12,12,16,.75), rgba(12,12,16,.35));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:16px; max-width:1100px; margin:0 auto; padding:14px clamp(16px,4vw,48px)}
+    .brand{display:flex; align-items:center; gap:14px}
+    .logo{
+      width:36px; height:36px; border-radius:12px; display:grid; place-items:center; color:white;
+      background: conic-gradient(from 200deg, hsl(var(--accent)), hsl(var(--accent-2)) 60%, hsl(var(--accent)) 100%);
+      box-shadow: 0 6px 24px hsl(var(--accent)/0.45);
+      font-weight:800;
+    }
+    .title{font-family: Fraunces, serif; letter-spacing:.4px; font-size:18px; color:white}
+    nav a{color:#cfd3ff; text-decoration:none; font-weight:600; padding:8px 10px; border-radius:12px}
+    nav a:hover{background: rgba(255,255,255,.06)}
+    .cta{background:linear-gradient(180deg, hsl(var(--accent)), hsl(var(--accent-2))); color:white; padding:10px 14px; border-radius:12px; font-weight:700}
+
+    .hero{display:grid; grid-template-columns: 1.2fr .8fr; gap:28px; align-items:center; margin-top:28px}
+    .hero h1{font-family: Fraunces, serif; font-size:clamp(36px, 5vw, 60px); color:white; line-height:1.1; margin:0}
+    .hero p{color:#d8dbff; font-size:clamp(16px,2.2vw,18px)}
+    .badge{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.08); color:#e9ecff; font-weight:600}
+    .badge svg{opacity:.9}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:20px; padding:18px 18px 16px; color:#eef; box-shadow:0 10px 30px rgba(0,0,0,.25)
+    }
+    .grid{display:grid; gap:16px}
+    .grid.cols-2{grid-template-columns: repeat(2, minmax(0,1fr))}
+    .grid.cols-3{grid-template-columns: repeat(3, minmax(0,1fr))}
+
+    h2{font-family: Fraunces, serif; color:white; font-size:clamp(22px,2.6vw,30px); margin:24px 0 12px}
+    h3{color:#fff; font-size:18px; margin:0 0 8px}
+    .subtle{color:#cdd}
+    ul{margin:8px 0 0 18px}
+    li{margin:6px 0}
+
+    .timeline{position:relative; padding-left:20px}
+    .timeline:before{content:""; position:absolute; left:8px; top:8px; bottom:8px; width:2px; background:rgba(255,255,255,.12)}
+    .dot{width:12px; height:12px; border-radius:50%; background:linear-gradient(180deg, hsl(var(--accent)), hsl(var(--accent-2))); position:absolute; left:3px; margin-top:6px; box-shadow:0 4px 12px hsl(var(--accent)/0.5)}
+    .when{color:#aabbff; font-weight:700; font-size:12px; letter-spacing:.4px; text-transform:uppercase}
+
+    .contact{
+      display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:12px
+    }
+    .contact a{color:#e9ecff; text-decoration:none; background:rgba(255,255,255,.08); padding:8px 12px; border-radius:999px}
+    .contact a:hover{background:rgba(255,255,255,.14)}
+
+    footer{margin-top:48px; color:#a7adff; border-top:1px solid rgba(255,255,255,.08); padding-top:16px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+
+    /* floating notes */
+    .note{position:absolute; opacity:.35; filter:blur(.2px)}
+    .note svg{width:22px; height:22px; fill:white}
+    .n1{left:8%; top:18%; animation:float 18s linear infinite}
+    .n2{left:78%; top:26%; animation:float 22s linear infinite reverse}
+    .n3{left:14%; top:72%; animation:float 24s linear infinite}
+    .n4{left:86%; top:70%; animation:float 26s linear infinite reverse}
+    @keyframes float{0%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-16px) rotate(6deg)} 100%{transform:translateY(0) rotate(0)}}
+    @media (prefers-reduced-motion: reduce){.note{display:none}}
+
+    @media (max-width: 900px){
+      .hero{grid-template-columns: 1fr;}
+      .grid.cols-2{grid-template-columns:1fr}
+      .grid.cols-3{grid-template-columns:1fr}
+    }
+
+    /* print: make it resume-clean */
+    @media print{
+      header, .staff, .note, footer, .badge, .cta {display:none}
+      body{background:white; color:#000}
+      .page{padding:0}
+      .card{border:0; box-shadow:none; background:transparent; color:#000; padding:0}
+      a{color:#000; text-decoration:underline}
+    }
+  </style>
+</head>
+<body>
+  <div class="staff" aria-hidden="true"></div>
+  <div class="note n1" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v12.55A4 4 0 1 1 10 12V6h8V3h-6z"/></svg></div>
+  <div class="note n2" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 3v12.55A4 4 0 1 1 7 12V6h10V3H9z"/></svg></div>
+  <div class="note n3" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v10l6-2V3h-6zM6 14a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg></div>
+  <div class="note n4" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 3v8l5-1V3h-5zM7 13a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg></div>
+
+  <a href="#main" class="skip">Skip to content</a>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">LG</div>
+        <div class="title">Leo J. Gong — CS × Arts</div>
+      </div>
+      <nav aria-label="Primary">
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#education">Education</a>
+        <a href="#contact">Contact</a>
+        <a class="cta" href="assets/Leo_Gong_Resume.pdf" download>Download Résumé</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <section class="hero">
+      <div>
+        <span class="badge" title="Carnegie Mellon University">CMU • B.S. Computer Science & Arts</span>
+        <h1>Software engineer with a soundtrack.</h1>
+        <p>I build systems and interfaces—from EPICS-backed GUIs and OpenCV tooling to course-scale OS projects—and I compose music for games. Clean architecture, reliable infra, and a little artistic spark.</p>
+        <div class="contact" id="contact">
+          <a href="mailto:leogong21@gmail.com" aria-label="Email">leogong21@gmail.com</a>
+          <a href="tel:+14085108950" aria-label="Phone">(408) 510‑8950</a>
+          <a href="https://www.linkedin.com/in/leo-gong/" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a href="https://github.com/Leoglucky" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </div>
+      <div class="card" role="img" aria-label="Stylized music + code motif">
+        <h3>Highlights</h3>
+        <ul>
+          <li>MBES endstation GUI (PyDM/PyQt) with tabbed views, alarms, and one‑click “Ready for Beam”.</li>
+          <li>Interlock status GUI with traffic‑light states & latched‑fault details.</li>
+          <li>Camera misalignment detector (OpenCV) with reference‑frame diff & key‑point matching.</li>
+        </ul>
+        <p class="subtle" style="margin-top:8px">More below ↓</p>
+      </div>
+    </section>
+
+    <section id="experience">
+      <h2>Experience</h2>
+      <div class="timeline grid">
+        <article class="card" style="position:relative">
+          <div class="dot" aria-hidden="true"></div>
+          <div class="when">Jun 2025 – Aug 2025 • Menlo Park, CA</div>
+          <h3>Software Developer Intern — Stanford National Accelerator Laboratory (SLAC)</h3>
+          <ul>
+            <li>Designed and shipped an MBES endstation GUI (Python, PyDM/PyQt) aggregating EPICS PVs with tabbed views, alarm widgets, and a one‑click “Ready for Beam” macro.</li>
+            <li>Implemented an Interlock status GUI with traffic‑light states, latched‑fault details, and improved fault tolerance.</li>
+            <li>Created a camera misalignment detector (OpenCV) using diff/key‑point matching; publishes EPICS alarms / chat notifications and includes a baseline‑recalibration utility.</li>
+            <li>Partnered with instrument scientists for requirements, iterated UI/UX, documented deployment/usage, and wrote smoke tests and install scripts.</li>
+          </ul>
+        </article>
+        <article class="card" style="position:relative">
+          <div class="dot" aria-hidden="true"></div>
+          <div class="when">Dec 2024 – Jan 2025 • Sunnyvale, CA</div>
+          <h3>Software Developer Intern — IntBot</h3>
+          <ul>
+            <li>Improved responsiveness & personality of service‑industry interactive bots (Python/TypeScript/JSON); demos shown at CES 2025.</li>
+            <li>Designed dynamic facial expression systems aligning visuals with emotional context; received positive investor feedback.</li>
+            <li>Optimized animation systems and emotion‑driven expressions for higher interaction quality.</li>
+          </ul>
+        </article>
+        <article class="card" style="position:relative">
+          <div class="dot" aria-hidden="true"></div>
+          <div class="when">Jun 2024 – Aug 2024 • Santa Clara, CA</div>
+          <h3>Software Developer Intern — Zeitro</h3>
+          <ul>
+            <li>Tested and debugged frontend sections of the website for Windows compatibility.</li>
+            <li>Built an interactive chatbot that routes messages directly to Slack channels.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Selected Projects</h2>
+      <div class="grid cols-2">
+        <article class="card">
+          <h3>15‑213 • Computer Systems</h3>
+          <ul>
+            <li>Cache simulator on Valgrind traces.</li>
+            <li>Custom malloc/free allocator.</li>
+            <li>Linux shell with signals, built‑ins, jobs, and I/O.</li>
+            <li>Multithreaded HTTP/1.0 web proxy.</li>
+            <li>Multithreaded file system (create/delete/read/write).</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>15‑281 • Artificial Intelligence</h3>
+          <ul>
+            <li>General search agents (reflex, minimax) for robot simulations.</li>
+            <li>GraphPlan planning for Pacman; classical learning algorithms.</li>
+            <li>Q‑Learning & Value Iteration, incl. asynchronous & approximate variants.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="education">
+      <h2>Education & Skills</h2>
+      <div class="grid cols-2">
+        <article class="card">
+          <h3>Carnegie Mellon University • B.S. Computer Science & Arts</h3>
+          <p class="subtle">Aug 2023 – May 2027 • Pittsburgh, PA • Dean’s List (Spring ’24, Fall ’24)</p>
+          <p><strong>Related Courses:</strong> Computer Systems, Data Structures & Algorithms in C, Functional Programming, Machine Learning, Artificial Intelligence.</p>
+        </article>
+        <article class="card">
+          <h3>Skills</h3>
+          <p>Java, C++, C, Python, R, JavaScript, Go, SQL, OpenCV, JSON; Software/Hardware compatibility.</p>
+          <p><strong>Music:</strong> Game music composer • GCS (CMU Game Creation Society) & Team Crescendo LLC.</p>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Leo J. Gong</div>
+      <div class="contact">
+        <a href="mailto:leogong21@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/leo-gong/" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="https://github.com/Leoglucky" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="assets/Leo_Gong_Resume.pdf" download>Résumé (PDF)</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
